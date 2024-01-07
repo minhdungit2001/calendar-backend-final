@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const passport_1 = __importDefault(require("passport"));
 const passport_jwt_1 = require("passport-jwt");
 const passport_local_1 = require("passport-local");
+const passport_google_oauth20_1 = require("passport-google-oauth20");
 const dotenv_1 = __importDefault(require("dotenv"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const AuthUserModel_1 = __importDefault(require("../../infrastructure/models/AuthUserModel"));
@@ -35,7 +36,7 @@ function roleToModel(role) {
 // Validate the token
 // Like static, In function passportConfig(Model) if you import AuthUserModel first and UserModel later, it will only read UserModel
 passport_1.default.use("jwt-access-token", new passport_jwt_1.Strategy({
-    jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(), //Get form header Authorization: Bearer token....
+    jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.JWT_SECRET_KEY,
 }, (payload, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -84,8 +85,8 @@ passport_1.default.use("jwt-refresh-token", new passport_jwt_1.Strategy({
 })));
 // Passport local: Check email and password for authType local
 passport_1.default.use(new passport_local_1.Strategy({
-    usernameField: "email", // Get email address field
-    passwordField: "password", // Get password field;
+    usernameField: "email",
+    passwordField: "password",
     session: false,
     passReqToCallback: true,
 }, (req, email, password, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -111,5 +112,45 @@ passport_1.default.use(new passport_local_1.Strategy({
         next(error, false);
     }
 })));
+// Passport Google
+passport_1.default.use(new passport_google_oauth20_1.Strategy({
+    clientID: process.env.GOOGLE_API_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_API_CLIENT_SECRET,
+    passReqToCallback: true,
+    callbackURL: "/api/v1/users/callback",
+}, (req, accessToken, refreshToken, profile, next) => __awaiter(void 0, void 0, void 0, function* () {
+    // User.findOrCreate({ "google.id": profile.id }, function (error, user) {
+    //   return next(error, user);
+    // });
+    var _a;
+    try {
+        const email = !!((_a = profile.emails) === null || _a === void 0 ? void 0 : _a[0]) && profile.emails[0].value;
+        // Check whether the user exists in our database
+        const userGoogle = yield AuthUserModel_1.default.findOne({
+            email: email,
+            // authGoogleId: profile.id,
+            // authType: "google",
+        });
+        if (userGoogle)
+            return next(null, userGoogle);
+        // If the first login with google
+        const newUser = new AuthUserModel_1.default({
+            authType: "google",
+            email: email,
+            authGoogleId: profile.id,
+        });
+        yield newUser.save();
+        next(null, newUser);
+    }
+    catch (error) {
+        next(error);
+    }
+})));
+passport_1.default.serializeUser(function (user, done) {
+    done(null, user);
+});
+passport_1.default.deserializeUser(function (user, done) {
+    done(null, user);
+});
 exports.default = passport_1.default;
 //# sourceMappingURL=passport.js.map

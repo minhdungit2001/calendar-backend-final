@@ -35,7 +35,7 @@ const TimeslotSchema = new mongoose_1.Schema({
         default: null,
     },
     typeMeeting: {
-        type: String, // "individual" or "group"
+        type: String,
         default: "individual",
     },
 }, { timestamps: true });

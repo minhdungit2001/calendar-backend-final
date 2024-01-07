@@ -21,6 +21,16 @@ class AuthUserController extends BaseCrudController_1.default {
     constructor() {
         super(new AuthUserService_1.default(), AuthUsers_1.AuthUserDto, AuthUsers_1.AuthUserCreateDto, AuthUsers_1.AuthUserUpdateDto);
         this.authUserService = new AuthUserService_1.default();
+        this.authChangePassword = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            const { newPassword } = req.body;
+            yield this.authUserService.updateAsync((_a = req.user) === null || _a === void 0 ? void 0 : _a._id.toString(), {
+                password: newPassword,
+            });
+            return res.status(200).json({
+                success: true,
+            });
+        });
         // Signup new entity
         this.authSignUpAsync = (req, res) => __awaiter(this, void 0, void 0, function* () {
             // Raw entity data get from body

@@ -102,8 +102,8 @@ class MeetingRepository extends BaseCrudRepository_1.default {
                 {
                     $lookup: {
                         from: "users",
-                        localField: "userIds", // Field in meeting
-                        foreignField: "_id", // Match with
+                        localField: "userIds",
+                        foreignField: "_id",
                         as: "userIds", // New name
                     },
                 },
