@@ -21,7 +21,7 @@ router
     .post((0, validateRequest_1.validateBody)(validateRequest_1.schemas.authSignin), passport_1.default.authenticate("local", { session: false }), controller.authSignInAsync);
 // Sign in
 router.route("/auth/google").get(passport_1.default.authenticate("google", {
-    scope: ["openid", "profile", "email"],
+    scope: ["profile", "email"],
 }), controller.authSignInAsync);
 router.route("/auth/google/success").get(controller.authSignInAsync);
 router.route("/callback").get(passport_1.default.authenticate("google", {

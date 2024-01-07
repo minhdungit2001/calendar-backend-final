@@ -137,7 +137,7 @@ passport_1.default.use(new passport_google_oauth20_1.Strategy({
         const newUser = new AuthUserModel_1.default({
             authType: "google",
             email: email,
-            authGoogleId: profile.id,
+            // authGoogleId: profile.id,
         });
         yield newUser.save();
         next(null, newUser);
