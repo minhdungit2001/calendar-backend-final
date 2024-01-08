@@ -22,7 +22,12 @@ const port = process.env.PORT || 3000;
 // Cors for accept request from frontend url
 const corsOptions = {
     exposedHeaders: "Authorization",
-    origin: process.env.VUE_URL,
+    origin: [
+        process.env.VUE_URL,
+        "http://127.0.0.1:5173",
+        "http://localhost:5173",
+    ],
+    default: process.env.VUE_URL,
     methods: "GET,POST,PUT,DELETE,OPTIONS",
     credentials: true,
 };
@@ -48,5 +53,6 @@ app.use(body_parser_1.default.json());
 (0, handleException_1.default)(app);
 app.listen(port, () => {
     console.log(`http://localhost:${port}`);
+    console.log(process.env.VUE_URL);
 });
 //# sourceMappingURL=index.js.map

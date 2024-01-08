@@ -24,7 +24,7 @@ exports.AuthUserDefiition = Object.assign({ email: {
         default: null,
     }, fullName: {
         type: String,
-        default: null,
+        required: true,
     }, groupIds: {
         type: [mongoose_1.Schema.Types.ObjectId],
         ref: "groups",

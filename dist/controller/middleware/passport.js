@@ -119,17 +119,13 @@ passport_1.default.use(new passport_google_oauth20_1.Strategy({
     passReqToCallback: true,
     callbackURL: "/api/v1/users/callback",
 }, (req, accessToken, refreshToken, profile, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // User.findOrCreate({ "google.id": profile.id }, function (error, user) {
-    //   return next(error, user);
-    // });
-    var _a;
+    var _a, _b;
     try {
-        const email = !!((_a = profile.emails) === null || _a === void 0 ? void 0 : _a[0]) && profile.emails[0].value;
+        const photos = !!((_a = profile.photos) === null || _a === void 0 ? void 0 : _a[0]) && profile.photos[0].value;
+        const email = !!((_b = profile.emails) === null || _b === void 0 ? void 0 : _b[0]) && profile.emails[0].value;
         // Check whether the user exists in our database
         const userGoogle = yield AuthUserModel_1.default.findOne({
             email: email,
-            // authGoogleId: profile.id,
-            // authType: "google",
         });
         if (userGoogle)
             return next(null, userGoogle);
@@ -137,7 +133,8 @@ passport_1.default.use(new passport_google_oauth20_1.Strategy({
         const newUser = new AuthUserModel_1.default({
             authType: "google",
             email: email,
-            // authGoogleId: profile.id,
+            avatar: { url: photos, id: null, public_id: null },
+            fullName: profile.displayName,
         });
         yield newUser.save();
         next(null, newUser);

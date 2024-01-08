@@ -39,7 +39,7 @@ class AuthUserRepository extends BaseCrudRepository_1.default {
             if (imgAvatar) {
                 // If have imageAvatar file, then delete old image in cloud, and set new image
                 var oldEntity = yield this.moongoseModel.findById(id);
-                if (oldEntity) {
+                if (oldEntity && oldEntity.authType === "local") {
                     if (oldEntity.avatar.public_id) {
                         yield cloud_1.default.deleteImage(oldEntity.avatar.public_id);
                     }
