@@ -9,13 +9,13 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 // Encode id to the token
 // Token for 3 days
-const encodeToken = (id, role = "users") => {
+const encodeToken = (id, role = "users", live = 60000 * 60) => {
     return jsonwebtoken_1.default.sign({
         iss: "Minh Dung",
         role: role,
         sub: id,
         iat: new Date().getTime(),
-        exp: new Date().getTime() + 60000 * 60, //60 minutes live
+        exp: new Date().getTime() + live, //60 minutes live
         // exp: new Date().getTime() + 30000,
     }, process.env.JWT_SECRET_KEY);
 };

@@ -23,11 +23,12 @@ router
 router.route("/auth/google").get(passport_1.default.authenticate("google", {
     scope: ["profile", "email"],
 }), controller.authSignInAsync);
-router.route("/auth/google/success").get(controller.authSignInAsync);
+router
+    .route("/auth/google/success")
+    .get(passport_1.default.authenticate("jwt-access-token", { session: false }), controller.authSignInAsync);
 router.route("/callback").get(passport_1.default.authenticate("google", {
     failureRedirect: `${process.env.VUE_URL}/login`,
-    successRedirect: `${process.env.VUE_URL}/?auth=true`,
-}));
+}), controller.authGoogleSuccess);
 router
     .route("/:id/change-password")
     .put(passport_1.default.authenticate("jwt-access-token", { session: false }), passport_1.default.authenticate("local", { session: false }), controller.authChangePassword);

@@ -27,7 +27,7 @@ const corsOptions = {
     credentials: true,
 };
 app.use((0, express_session_1.default)({
-    secret: "dsvdfvbdf",
+    secret: "keysecretexample",
     resave: false,
     saveUninitialized: true,
 }));

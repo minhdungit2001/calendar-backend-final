@@ -31,30 +31,41 @@ class AuthUserController extends BaseCrudController_1.default {
                 success: true,
             });
         });
-        // Signup new entity
+        // Signup new user
         this.authSignUpAsync = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            // Raw entity data get from body
+            // Raw user data get from body
             const rawEntity = req.body;
-            const entityCreateDto = new this.EntityCreateDto(rawEntity);
-            const entityDto = yield this.authUserService.createAsync(entityCreateDto);
-            return res.status(201).json(entityDto);
+            const userCreateDto = new this.EntityCreateDto(rawEntity);
+            const userDto = yield this.authUserService.createAsync(userCreateDto);
+            return res.status(201).json(userDto);
         });
-        // Signin entity
+        // Signin user
         this.authSignInAsync = (req, res) => __awaiter(this, void 0, void 0, function* () {
             // Recieve user from passport jwt middleware. It had done verification
-            const entityDto = new this.EntityDto(req.user);
-            const entityDtoId = entityDto._id;
-            const accessToken = (0, jwt_1.encodeToken)(entityDtoId, this.modelName);
-            const { refreshToken, expiresIn } = (0, jwt_1.encodeRefreshToken)(entityDtoId, this.modelName);
+            const userDto = new this.EntityDto(req.user);
+            const userDtoId = userDto._id;
+            const accessToken = (0, jwt_1.encodeToken)(userDtoId, this.modelName);
+            const { refreshToken, expiresIn } = (0, jwt_1.encodeRefreshToken)(userDtoId, this.modelName);
             return res.status(200).json({
                 role: this.modelName,
-                user: entityDto,
+                user: userDto,
                 accessToken: accessToken,
                 refreshToken: refreshToken,
                 expiresIn: expiresIn,
             });
         });
-        // Update entity
+        this.authGoogleSuccess = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            var _b;
+            // Recieve user from passport jwt middleware. It had done verification
+            const REDICTURL = process.env.VUE_URL;
+            const userId = ((_b = req.user) === null || _b === void 0 ? void 0 : _b._id) || "";
+            if (!userId) {
+                res.redirect(`${REDICTURL}/login`);
+            }
+            const accessToken = (0, jwt_1.encodeToken)(userId, this.modelName, 60000 * 5);
+            res.redirect(`${REDICTURL}/?auth=google&_note=${accessToken}`);
+        });
+        // Update user
         this.updateAsync = (req, res) => __awaiter(this, void 0, void 0, function* () {
             // Id from route params
             const { id } = req.params;
@@ -66,9 +77,9 @@ class AuthUserController extends BaseCrudController_1.default {
             else {
                 imgAvatar = undefined;
             }
-            // Raw entity from boy for update limited fields upload
-            const entityUpdateDto = new this.EntityUpdateDto(Object.assign({ _id: id }, req.body));
-            const newEntityDto = yield this.authUserService.updateAsync(id, entityUpdateDto, imgAvatar);
+            // Raw user from boy for update limited fields upload
+            const userUpdateDto = new this.EntityUpdateDto(Object.assign({ _id: id }, req.body));
+            const newEntityDto = yield this.authUserService.updateAsync(id, userUpdateDto, imgAvatar);
             return res.status(200).json(newEntityDto);
         });
         this.checkExpriedToken = (req, res, next) => {
@@ -87,9 +98,9 @@ class AuthUserController extends BaseCrudController_1.default {
             return res.status(200).json(user);
         };
         this.refreshToken = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const entity = req.user;
-            if (entity) {
-                const accessToken = (0, jwt_1.encodeToken)(entity._id, this.modelName);
+            const user = req.user;
+            if (user) {
+                const accessToken = (0, jwt_1.encodeToken)(user._id, this.modelName);
                 return res.status(200).json({
                     accessToken: accessToken,
                 });
@@ -99,8 +110,8 @@ class AuthUserController extends BaseCrudController_1.default {
         this.findByNameIncludeAsync = (req, res) => __awaiter(this, void 0, void 0, function* () {
             // Get id from route parameters
             const { name } = req.query;
-            const entityDto = yield this.authUserService.findByNameIncludeAsync(name);
-            return res.status(200).json(entityDto);
+            const userDto = yield this.authUserService.findByNameIncludeAsync(name);
+            return res.status(200).json(userDto);
         });
     }
 }
