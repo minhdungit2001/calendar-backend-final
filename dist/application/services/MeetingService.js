@@ -70,7 +70,6 @@ class MeetingService extends BaseCrudService_1.default {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
             const existMeeting = yield this.meetingRepository.findMeetingPeriod(startDate, endDate, userId);
-            console.log(existMeeting);
             if (existMeeting && existMeeting.length > 2) {
                 throw new exceptions_1.BaseException(404, "CONFLICT_TIME", `CRUD ${this.modleName} failed! Conflict time.`);
             }

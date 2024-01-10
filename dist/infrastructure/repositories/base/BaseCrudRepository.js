@@ -32,7 +32,6 @@ class BaseCrudRepository extends BaseReadOnlyRepository_1.default {
     createAsync(entityCreateDto) {
         return __awaiter(this, void 0, void 0, function* () {
             const entity = yield new this.moongoseModel(entityCreateDto).save();
-            console.log(entity.createdAt);
             return entity;
         });
     }

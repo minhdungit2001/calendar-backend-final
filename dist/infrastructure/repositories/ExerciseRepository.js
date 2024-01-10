@@ -32,6 +32,7 @@ class ExerciseRepository extends BaseCrudRepository_1.default {
                 .find({
                 groupId: groupId,
             })
+                .sort({ createdAt: -1 })
                 .populate("fileInfoId groupId submittedIds.fileInfoId submittedIds.userId");
             return exercises;
         });

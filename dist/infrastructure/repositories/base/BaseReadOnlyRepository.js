@@ -22,7 +22,7 @@ class BaseReadOnlyRepository {
     }
     getAllAsync() {
         return __awaiter(this, void 0, void 0, function* () {
-            const entities = yield this.moongoseModel.find({});
+            const entities = yield this.moongoseModel.find({}).sort({ createdAt: -1 });
             return entities;
         });
     }
@@ -44,13 +44,18 @@ class BaseReadOnlyRepository {
     }
     findManyByIdsAsync(ids) {
         return __awaiter(this, void 0, void 0, function* () {
-            const entities = yield this.moongoseModel.find({ _id: { $in: ids } });
+            const entities = yield this.moongoseModel
+                .find({ _id: { $in: ids } })
+                .sort({ createdAt: -1 });
             return entities;
         });
     }
     findAsync(query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const entities = yield this.moongoseModel.find(query).limit(20);
+            const entities = yield this.moongoseModel
+                .find(query)
+                .sort({ createdAt: -1 })
+                .limit(20);
             return entities;
         });
     }
@@ -61,6 +66,7 @@ class BaseReadOnlyRepository {
             const strPopulate = populate !== null && populate !== void 0 ? populate : "";
             const entities = yield this.moongoseModel
                 .find(query)
+                .sort({ createdAt: -1 })
                 .populate(strPopulate)
                 .limit(20);
             return entities;

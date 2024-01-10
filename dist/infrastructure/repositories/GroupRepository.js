@@ -28,9 +28,11 @@ class GroupRepository extends BaseCrudRepository_1.default {
     }
     findAllByIdsOrAdminIdAsync(ids, adminId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.moongoseModel.find({
+            return yield this.moongoseModel
+                .find({
                 $or: [{ adminId: adminId }, { _id: { $in: ids } }],
-            });
+            })
+                .sort({ createdAt: -1 });
         });
     }
 }

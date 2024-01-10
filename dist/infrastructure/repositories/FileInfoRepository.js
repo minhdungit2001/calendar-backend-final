@@ -37,13 +37,15 @@ class FileInfoRepository extends BaseCrudRepository_1.default {
      */
     findSubmittedRoleAdminAsync(groupId, exerciseId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.moongoseModel.find({
+            return yield this.moongoseModel
+                .find({
                 $and: [
                     { groupId: new mongoose_1.Types.ObjectId(groupId) },
                     { exerciseId: new mongoose_1.Types.ObjectId(exerciseId) },
                     { type: "submitted" },
                 ],
-            });
+            })
+                .sort({ createdAt: -1 });
         });
     }
     /**
@@ -55,38 +57,46 @@ class FileInfoRepository extends BaseCrudRepository_1.default {
      */
     findSubmittedRoleMemberAsync(groupId, exerciseId, userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.moongoseModel.find({
+            return yield this.moongoseModel
+                .find({
                 $and: [
                     { groupId: new mongoose_1.Types.ObjectId(groupId) },
                     { exerciseId: new mongoose_1.Types.ObjectId(exerciseId) },
                     { userId: new mongoose_1.Types.ObjectId(userId) },
                     { type: "submitted" },
                 ],
-            });
+            })
+                .sort({ createdAt: -1 });
         });
     }
     findDescriptionAsync(exerciseId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.moongoseModel.find({
+            return yield this.moongoseModel
+                .find({
                 $and: [
                     { exerciseId: new mongoose_1.Types.ObjectId(exerciseId) },
                     { type: "description" },
                 ],
-            });
+            })
+                .sort({ createdAt: -1 });
         });
     }
     findByUserIdAsync(userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.moongoseModel.find({
+            return yield this.moongoseModel
+                .find({
                 userId: new mongoose_1.Types.ObjectId(userId),
-            });
+            })
+                .sort({ createdAt: -1 });
         });
     }
     findByGroupIdAsync(groupId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.moongoseModel.find({
+            return yield this.moongoseModel
+                .find({
                 groupId: new mongoose_1.Types.ObjectId(groupId),
-            });
+            })
+                .sort({ createdAt: -1 });
         });
     }
 }
