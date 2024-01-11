@@ -11,6 +11,7 @@ const controller = new MeetingController_1.default();
 const router = (0, express_promise_router_1.default)();
 router.get("/freeTimes/:freeTimeId", controller.findByFreeTimeIdAsync);
 router.get("/groups/:groupId/users/:userId", (0, validateQuerySpecial_1.validateQueryGetMeetingByFieldId)(), controller.findByGroupIdAsync);
+router.get("/groups/:groupId/users/:userId/:userFilter", controller.filterMeetingsByUserIdAysnc);
 router.get("/users/:userId/groups/:groupId", (0, validateQuerySpecial_1.validateQueryGetMeetingByFieldId)(), controller.findByUserIdWithStatusAsync);
 router.get("/all/users/:userId", (0, validateQuerySpecial_1.validateQueryGetMeetingByFieldId)(), controller.findAllMeetingWithStatusAsync);
 router.put("/:id/users", controller.addUserIdsAsync);

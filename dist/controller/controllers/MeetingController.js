@@ -45,6 +45,11 @@ class MeetingController extends BaseCrudController_1.default {
             const meetings = yield this.meetingService.findAllMeetingWithStatusAsync(userId, startDatetime, endDatetime);
             res.status(200).json(meetings);
         });
+        this.filterMeetingsByUserIdAysnc = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { userFilter, groupId } = req.params;
+            const meetings = yield this.meetingService.filterMeetingsByUserIdAysnc(userFilter, groupId);
+            res.status(200).json(meetings);
+        });
         this.findByUserIdWithStatusAsync = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { userId, groupId } = req.params;
             const { startDatetime, endDatetime } = req.queryValid;

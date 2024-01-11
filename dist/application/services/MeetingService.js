@@ -54,6 +54,12 @@ class MeetingService extends BaseCrudService_1.default {
             return this.formatMeetingResponse(meetings);
         });
     }
+    filterMeetingsByUserIdAysnc(userId, groupId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const meetings = yield this.meetingRepository.filterMeetingsByUserIdAysnc(userId, groupId);
+            return this.formatMeetingResponse(meetings);
+        });
+    }
     findByGroupIdsWithStatusAsync(groupIds, startDate = new Date().setDate(new Date().getDate() - 15), endDate = new Date().setDate(new Date().getDate() + 15), userId, isAdmin = false, isPrivate = false) {
         return __awaiter(this, void 0, void 0, function* () {
             const meetings = yield this.meetingRepository.findByGroupIdsWithStatusAsync(groupIds, startDate, endDate, userId, isAdmin, isPrivate);

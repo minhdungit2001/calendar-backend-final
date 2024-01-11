@@ -27,6 +27,21 @@ class MeetingRepository extends BaseCrudRepository_1.default {
             return yield this.moongoseModel.findById(id).populate("adminId groupId");
         });
     }
+    filterMeetingsByUserIdAysnc(userId, groupId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const matchCondition = {
+                $or: [
+                    {
+                        groupId: new mongoose_1.Types.ObjectId(groupId),
+                        userIds: new mongoose_1.Types.ObjectId(userId),
+                        isPrivate: true,
+                    },
+                    { groupId: new mongoose_1.Types.ObjectId(groupId), isPrivate: false },
+                ],
+            };
+            return yield this.findMeetingsWithStatusAsync(matchCondition);
+        });
+    }
     findAllMeetingWithStatusAsync(userId, groupIds, startDate, endDate) {
         return __awaiter(this, void 0, void 0, function* () {
             const groupIdsSchema = groupIds.map((groupId) => new mongoose_1.Types.ObjectId(groupId));
